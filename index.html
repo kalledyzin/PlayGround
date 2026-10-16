@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SEMIDEUS: Ecos do Olimpo — Jogo de Escolhas 3D (pt-BR)</title>
+<meta name="description" content="Jogo narrativo 3D em pt-BR estilo Detroit: Become Human no universo de Percy Jackson. 3 protagonistas, escolhas, headcanons, múltiplos finais." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>" />
+<link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+<div id="app">
+  <!-- ============ TÍTULO ============ -->
+  <div id="title" class="screen">
+    <div class="wrap">
+      <div>
+        <div class="kicker">UM JOGO DE ESCOLHAS • PT-BR • 3D PARA DESKTOP</div>
+        <h1 class="title">SEMIDEUS<br /><span>ECOS DO OLIMPO</span></h1>
+        <p class="sub">Como <b>Detroit: Become Human</b>, cada escolha importa. Jogue com <b>Percy, Annabeth e Nico</b> numa história inédita baseada na lore dos livros de <b>Percy Jackson</b>, com <b>headcanons</b> e opções <b>fan-service</b>. Explore o Acampamento Meio-Sangue em 3D, sobreviva a QTEs, desbloqueie o fluxograma e conquiste um dos <b>4 finais</b>.</p>
+        <div class="badges">
+          <span class="badge">🏛️ Lore dos livros</span>
+          <span class="badge hot">🌟 Headcanons de fãs</span>
+          <span class="badge hot">💖 Fan-service Percabeth & Solangelo</span>
+          <span class="badge">🔀 9 cenas • 4 finais • 8 epílogos</span>
+          <span class="badge">🖥️ Desktop: WASD + mouse</span>
+        </div>
+        <div class="row">
+          <button class="btn" id="btnStart">▶ COMEÇAR A HISTÓRIA</button>
+          <button class="btn ghost" id="btnContinue">↻ Continuar save</button>
+          <button class="btn ghost" id="btnFlow0">🔀 Ver fluxograma</button>
+        </div>
+        <div class="profs">
+          <div class="prof"><div class="dot" style="color:#1e90ff;background:#1e90ff"></div><div><b>Percy Jackson — filho de Poseidon</b><small>O herói cansado. O mar sangra e chama por ele.</small></div></div>
+          <div class="prof"><div class="dot" style="color:#f5b301;background:#f5b301"></div><div><b>Annabeth Chase — filha de Atena</b><small>A arquiteta. Encontra um mapa que ela não lembra de desenhar.</small></div></div>
+          <div class="prof"><div class="dot" style="color:#7a3cff;background:#7a3cff"></div><div><b>Nico di Angelo — filho de Hades</b><small>O menino das sombras. Uma oferta impossível na Colina.</small></div></div>
+        </div>
+        <p class="foot">Fan-game sem fins lucrativos, inspirado na obra de Rick Riordan. Controles: <kbd>WASD</kbd>/<kbd>setas</kbd> andar • arrastar mouse = câmera • <kbd>Espaço</kbd> avançar diálogo • <kbd>M</kbd> fluxograma • <kbd>F11</kbd> tela cheia. Desktop: <kbd>npm run desktop</kbd> abre o jogo no Electron (baixa ~1x) ou jogue aqui mesmo.</p>
+      </div>
+      <div>
+        <div class="hero3d"><div id="titleCanvas" style="width:100%;height:100%"></div><div class="hint">Acampamento Meio-Sangue em 3D — renderização ao vivo</div></div>
+        <div class="card" style="margin-top:12px">
+          <b style="color:var(--gold);letter-spacing:.15em;font-size:12px">📜 A NOVA PROFECIA</b>
+          <p style="font-style:italic;color:var(--dim);font-size:14px;line-height:1.6;margin:8px 0 0">“Quando o mar chorar em sangue, e a sombra beijar a chama, três meios-sangues decidirão: o trono que cai ou que se inflama...”</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ JOGO ============ -->
+  <div id="game" class="hidden">
+    <div id="view3d"></div>
+    <div id="vignette"></div>
+    <div id="hud">
+      <div class="left">
+        <div class="pill" id="whoLabel"><span id="whoDot"></span><b id="whoName">PERCY</b><span id="capLabel">PRÓLOGO</span></div>
+        <div class="pill">🏛️ Olimpo <span class="bar"><i id="barOlimpo" style="background:#7cc4ff"></i></span></div>
+        <div class="pill">🤝 Equipe <span class="bar"><i id="barEquipe" style="background:#39ff88"></i></span></div>
+        <div class="pill">🌑 Sombra <span class="bar"><i id="barSombra" style="background:#b44dff"></i></span></div>
+      </div>
+      <div class="right">
+        <button class="btn small ghost" id="btnFlow">🔀 Fluxograma <kbd>M</kbd></button>
+        <button class="btn small ghost" id="btnMute">🔊</button>
+        <button class="btn small ghost" id="btnQuit">✕</button>
+      </div>
+    </div>
+    <div id="explore" class="hidden">🚶 EXPLORE EM 3D — vá até o <b>feixe dourado</b> <span id="dist"></span><br /><small style="color:#fff;font-weight:400">WASD / setas ou arraste no joystick • arraste o mouse p/ girar câmera</small></div>
+    <div id="joy" class="hidden"><div id="stick"></div></div>
+    <div id="dialog" class="hidden">
+      <h3 id="dCap">CAPÍTULO</h3>
+      <h2 id="dTitle">Título</h2>
+      <div id="dtext"></div>
+      <div id="dnext"><span id="obj"></span><button class="btn small" id="btnNext">Continuar ▸ <kbd>Espaço</kbd></button></div>
+    </div>
+    <div id="choices" class="hidden"></div>
+    <div id="result" class="hidden"><div class="card"><b style="color:var(--gold);font-size:12px;letter-spacing:.2em">CONSEQUÊNCIA</b><p id="rtext"></p><div id="reffects"></div><div id="pct"></div><div class="row"><button class="btn small" id="btnAfter">Continuar ▸</button></div></div></div>
+    <div id="qte" class="hidden"><div class="box"><h2>⚡ EVENTO RÁPIDO ⚡</h2><div id="qteText">Pressione!</div><div id="qteKey">ESPAÇO</div><div id="qteBar"><i style="width:100%"></i></div><small>pressione a tecla certa antes da barra zerar!</small></div></div>
+    <div id="toast"></div>
+  </div>
+
+  <!-- ============ FLUXOGRAMA ============ -->
+  <div id="flow" class="hidden"><div class="card sheet"><h2 style="margin:0">🔀 FLUXOGRAMA — estilo Detroit</h2><p style="color:var(--dim);font-size:13px">Cada nó é uma escolha que você fez. Nós não visitados aparecem como ???. Termine capítulos para desbloquear a visão completa.</p><div id="flowNodes"></div><div class="row"><button class="btn small" id="btnCloseFlow">Fechar</button></div></div></div>
+
+  <!-- ============ FINAL ============ -->
+  <div id="ending" class="screen hidden"><div class="card sheet"><div class="kicker">🏁 HISTÓRIA CONCLUÍDA</div><h1 id="endTitle">FINAL</h1><div class="stats3"><div class="stat">🏛️ Olimpo<b id="stO">0</b></div><div class="stat">🤝 Equipe<b id="stE">0</b></div><div class="stat">🌑 Sombra<b id="stS">0</b></div></div><p id="endText"></p><div id="epilogos"></div><h3>🔀 Seu fluxograma completo</h3><div id="endFlow"></div><div class="row"><button class="btn" id="btnAgain">↻ Jogar de novo (outro final)</button><button class="btn ghost" id="btnTitle2">⌂ Título</button></div><p class="foot">💡 Dica de fã: com Sombra alta você pega o Final C; ajoelhando-se a Zeus você força a guerra do Final B; o plano “NINGUÉM morre” exige Equipe alta e desbloqueia o epílogo supremo. Headcanons 🌟 e fan-service 💖 mudam epílogos!</p></div></div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

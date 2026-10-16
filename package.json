@@ -1,0 +1,20 @@
+{
+  "name": "semideus-ecos-do-olimpo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "SEMIDEUS: Ecos do Olimpo — jogo narrativo 3D de escolhas em pt-BR, estilo Detroit: Become Human, no universo de Percy Jackson",
+  "main": "electron-main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "desktop": "npx -y electron@latest ."
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
